@@ -1,55 +1,88 @@
-# React + TypeScript + Vite
+# Multi-Select — React Tag Input
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A reusable TypeScript multi-select component with removable tags, preset options, and free-text entry. The example app renders the component and logs selection changes to the console.
 
-Currently, two official plugins are available:
+**Stack:** React 19 · TypeScript · Vite 6 · SCSS
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Highlights
 
-## Expanding the ESLint configuration
+- Add preset options from a dropdown or custom values with Enter.
+- Trim values and prevent empty or duplicate selections.
+- Remove individual tags using their remove buttons.
+- Backspace removes the last selected item when the input is empty.
+- Close the dropdown on an outside mouse click.
+- Component props for placeholder, custom class, dropdown height, and disabled input.
+- SCSS modules keep component styles separate from the example page.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Run locally
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+Install Node.js and npm, then:
+
+```sh
+git clone https://github.com/itzhoman/Multi-Select.git
+cd Multi-Select
+npm ci
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Open the local URL printed by Vite (normally http://localhost:5173). 
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Development commands
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+| Command | Purpose |
+| --- | --- |
+| `npm run dev` | Start the development server |
+| `npm run build` | Type-check and build the production bundle |
+| `npm run lint` | Run the configured lint command |
+| `npm run preview` | Preview the Vite production bundle |
+
+No automated test script is currently defined in `package.json`.
+
+## Project structure
+
+| Path | Responsibility |
+| --- | --- |
+| `src/components/multiselect/MultiSelect.tsx` | Selection state, dropdown, tags, and event handlers |
+| `src/components/multiselect/types.ts` | Public component props |
+| `src/components/multiselect/MultiSelect.module.scss` | Scoped component styles |
+| `src/App.tsx` | Example usage and onChange callback |
+| `src/main.tsx` | React application entry point |
+| `tsconfig.app.json` | Application TypeScript settings |
+
+## Component usage
+
+```tsx
+import MultiSelect from "./components/multiselect/MultiSelect";
+
+<MultiSelect
+  options={["React", "TypeScript", "Next.js"]}
+  onChange={(selected) => console.log(selected)}
+  placeholder="Add skills…"
+  maxHeight={180}
+/>
 ```
-"# Multi-Select" 
+
+| Prop | Type | Default | Purpose |
+| --- | --- | --- | --- |
+| `options` | `string[]` | Required | Available preset options |
+| `onChange` | `(selected: string[]) => void` | Required | Receives the full selection after changes |
+| `placeholder` | `string` | `"Try to add..."` | Empty-state input text |
+| `className` | `string` | None | Additional wrapper class |
+| `maxHeight` | `number` | `150` | Dropdown maximum height in pixels |
+| `disabled` | `boolean` | `false` | Disables the input and opening interaction |
+
+## Customize
+
+- Pass your own string options and handle the `onChange` callback.
+- Style the component through its SCSS module or `className` prop.
+- Use `maxHeight` to adjust the dropdown scroll area.
+
+## Current scope
+
+Selection state is internal: there is no controlled `value` prop. Typed text is added with Enter; it does not filter the preset dropdown. Arrow-key option navigation is not implemented. `disabled` disables the input/open interaction, but existing tag remove buttons remain active.
+
+## Repository
+
+[Source on GitHub](https://github.com/itzhoman/Multi-Select) · [Hooman Hajimohamadi](https://github.com/itzhoman)
+
+Documentation reviewed against source commit [`7ed055c`](https://github.com/itzhoman/Multi-Select/commit/7ed055cfa1ae2aeeacc6d9a324acad6b7f451608).
